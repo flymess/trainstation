@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+</head>
+<style>
+    #container{
+        height:600px;
+    }
+</style>
+<body>
+<div id="container"></div>
+<script src="//api.map.baidu.com/api?v=1.4&key=PlbWfPzvYiMUaVHvZOd9pdwAeBYW4iQl&callback=initialize"></script>
+<script>
+    window.onload = function () {
+	  var map = new BMap.Map("container");
+	  var point = new BMap.Point(116.404, 39.915);
+	  map.centerAndZoom(point, 15);
+	  window.setTimeout(function () {
+        map.panTo(new BMap.Point(120.617116,31.335936))
+	  }, 2000)
+	}
+</script>
+</body>
+</html>
