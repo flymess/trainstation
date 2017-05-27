@@ -9,24 +9,65 @@
     #container{
         height:600px;
     }
+
+    .search{
+        line-height: 40px;
+        display: inline-block;
+        margin:0 auto;
+        border: 1px solid #bfcbd9;
+        border-radius: 5px;
+    }
+
+    .search input{
+        height:40px;
+        width:300px;
+        outline:none;
+        border: none;
+        padding: 3px 10px;
+    }
+    .search span{
+        display: inline-block;
+        height:40px;
+        width:60px;
+        background: #bfcbd9;
+        padding:5px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    #r-result{
+        margin-top:20px;
+    }
 </style>
 <body>
 <div id="container"></div>
+<div style="text-align: center;margin-top: 50px;">
+    <div class="search">
+        <input type="text"><span>搜索</span>
+    </div>
+</div>
+<div id="r-result"></div>
 <script src="//api.map.baidu.com/api?v=1.4&key=PlbWfPzvYiMUaVHvZOd9pdwAeBYW4iQl&callback=initialize"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
     window.onload = function () {
 	  var map = new BMap.Map("container");
 	  var point = new BMap.Point(120.617116,31.335936);
-	  map.centerAndZoom(point, 15);
+	  map.centerAndZoom(point, 18);
 	  map.enableScrollWheelZoom();
       map.addControl(new BMap.NavigationControl());
 
       //创建标注
-      var marker = new BMap.Marker(point);
-      map.addOverlay(marker);
+//      var marker = new BMap.Marker(point);
+//      map.addOverlay(marker);
 
-      map.addEventListener("click", function (e) {
-        console.log(e)
+      //设置周边查询半径
+      var circle = new BMap.Circle(point, 1000, {fillColor: "blue", strokeWeight: 1, fillOpacity: 0.3, strokeOpacity: 0.3});
+      map.addOverlay(circle)
+	  var local =  new BMap.LocalSearch(map, {renderOptions: {map: map,panel: "r-result", autoViewport: false}});
+      $('.search span').on('click', function (e) {
+        let content = $('.search input').val()
+        local.searchNearby(content, point, 1000)
 	  })
 	}
 </script>
