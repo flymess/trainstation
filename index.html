@@ -2,50 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>周边查询</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="./css/public.css"/>
 </head>
-<style>
-    #container{
-        height:600px;
-    }
-
-    .search{
-        line-height: 40px;
-        display: inline-block;
-        margin:0 auto;
-        border: 1px solid #bfcbd9;
-        border-radius: 5px;
-    }
-
-    .search input{
-        height:40px;
-        width:300px;
-        outline:none;
-        border: none;
-        padding: 3px 10px;
-    }
-    .search span{
-        display: inline-block;
-        height:40px;
-        width:60px;
-        background: #bfcbd9;
-        padding:5px;
-        color: #fff;
-        cursor: pointer;
-    }
-
-    #r-result{
-        margin-top:20px;
-    }
-</style>
 <body>
-<div id="container"></div>
-<div style="text-align: center;margin-top: 50px;">
-    <div class="search">
-        <input type="text"><span>搜索</span>
+<header>苏州火车站周边服务查询</header>
+
+<div>
+    <ul class="sidebar">
+        <li><a href="./intro.html">苏州火车站简介</a></li>
+        <li><a href="./navigation.html">地图导航</a></li>
+        <li><a href="#"  class="active">周边查询</a></li>
+        <li><a href="">特色项目</a></li>
+    </ul>
+    <div id="container"></div>
+    <div style="text-align: center;margin-top: 50px;">
+        <!--<div class="search">-->
+            <!--<input type="text"><span>搜索</span>-->
+        <!--</div>-->
+        <div class="search-list">
+            <ul>
+                <li>酒店</li>
+                <li>餐厅</li>
+                <li>景点</li>
+            </ul>
+        </div>
     </div>
 </div>
+
 <div id="r-result"></div>
 <script src="//api.map.baidu.com/api?v=1.4&key=PlbWfPzvYiMUaVHvZOd9pdwAeBYW4iQl&callback=initialize"></script>
 <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
@@ -57,17 +42,27 @@
 	  map.enableScrollWheelZoom();
       map.addControl(new BMap.NavigationControl());
 
-      //创建标注
-//      var marker = new BMap.Marker(point);
-//      map.addOverlay(marker);
-
-      //设置周边查询半径
-      var circle = new BMap.Circle(point, 1000, {fillColor: "blue", strokeWeight: 1, fillOpacity: 0.3, strokeOpacity: 0.3});
-      map.addOverlay(circle)
 	  var local =  new BMap.LocalSearch(map, {renderOptions: {map: map,panel: "r-result", autoViewport: false}});
+	  /**
+       * 点击搜索按钮
+       * */
       $('.search span').on('click', function (e) {
-        let content = $('.search input').val()
-        local.searchNearby(content, point, 1000)
+		let content = $('.search input').val()
+        if ($.trim(content) === ''){
+		  alert("请输入要查询的内容")
+          return
+        }
+
+		map.centerAndZoom(point, 14);
+        local.searchNearby(content, point, 5000)
+	  })
+      /**
+       * 点击文字查询
+       * */
+      $('.search-list ul li').on('click', function (e) {
+        var content = $(this).text()
+        map.centerAndZoom(point, 14);
+        local.searchNearby(content, point, 5000)
 	  })
 	}
 </script>
